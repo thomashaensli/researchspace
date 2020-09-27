@@ -1,15 +1,3 @@
-{{#if new}}
-  {{#if broader}}
-      <h1 style="margin-bottom: 1em;">Adding: <strong>new term narrower to <mp-label iri='{{broader}}'></mp-label></strong></h1>
-  {{else}}
-      <h1 style="margin-bottom: 1em;">Adding: <strong>new term</strong></h1>
-  {{/if}}
-{{/if}}
-
-{{#if edit}}<h1>Editing term: <strong><mp-label iri='{{node}}'></mp-label></strong></h1>
-  <div style="margin-bottom: 1.2em;">Term IRI: {{node}}</div>
-{{/if}}
-
 <semantic-form id='vocab-form' 
                persistence='{"type": "sparql", "targetGraphIri": "{{scheme}}"}'
                new-subject-template='{{#if new}}http://www.researchspace.org/entity/E55_Type/{{{{raw}}}}{{UUID}}{{{{/raw}}}}{{/if}}'
