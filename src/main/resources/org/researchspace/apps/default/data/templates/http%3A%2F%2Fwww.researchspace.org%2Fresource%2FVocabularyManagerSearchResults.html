@@ -1,0 +1,99 @@
+<semantic-search>
+<div class="rs-vocabulary-scheme-row">
+<h1 class="rs-vocabulary-scheme-title">Scheme</h1>
+<div>
+<semantic-search-query-keyword query='
+            PREFIX bds: <http://www.bigdata.com/rdf/search#>
+            SELECT ?scheme ?schemeLabel WHERE {
+            {
+                GRAPH ?scheme {
+                ?scheme a skos:ConceptScheme ;
+                        skos:prefLabel ?schemeLabel .
+                ?schemeLabel bds:search ?__token__ .
+                }
+            }
+            UNION {
+                GRAPH ?scheme {
+                ?scheme rdf:type crm:E32_Authority_Document ;
+                        rdfs:label ?schemeLabel .
+                ?schemeLabel bds:search ?__token__ .
+            }
+            }
+        }
+        '
+        default-query='
+            SELECT DISTINCT ?scheme ?schemeLabel ?schemeType ?schemeEntityType WHERE {
+                    {
+                        GRAPH ?scheme {
+                            ?scheme rdf:type skos:ConceptScheme;
+                                    skos:prefLabel ?schemeLabel.
+                            BIND(skos:ConceptScheme AS ?schemeType)
+                        }
+                    }
+                    UNION
+                    {
+                        GRAPH ?scheme {
+                            ?scheme rdf:type crm:E32_Authority_Document;
+                                    rdfs:label ?schemeLabel.
+                        
+                            BIND(crm:E32_Authority_Document AS ?schemeType)
+                        }
+                    }
+            }
+        '
+></semantic-search-query-keyword>
+    
+             </div>
+            </div>
+            <semantic-search-result-holder>
+              <semantic-search-result>
+                
+              
+    <semantic-table id='scheme-table'
+                query='SELECT DISTINCT ?scheme ?schemeLabel ?schemeType WHERE {} ORDER BY ASC(STR(LCASE(?schemeLabel)))'
+                number-of-displayed-rows=15
+                options='{"showTableHeading": false, "showFilter": false}'
+                no-result-template='{{> noScheme}}'
+                column-configuration='[
+                    { "variableName": "scheme", "cellTemplate": "{{> schemeRow}}" }
+                ]'>
+    <template id="noScheme">
+    <div style="padding: 12px 8px">
+        No vocabulary available
+    </div>
+    </template>
+
+    <template id='schemeRow'>
+    <div class="scheme-table-row">
+        <semantic-link iri="{{scheme.value}}" class="schema-label">{{schemeLabel.value}}</semantic-link>
+        <div class="btn-table-container">
+        <semantic-link-container uri='{{scheme.value}}' class="schema-label">
+                          <button class="btn-table">Show Terms</button>
+                        </semantic-link-container>
+        <mp-overlay-dialog title="Edit {{schemeLabel.value}}" type="modal" bs-size="large">
+            <mp-overlay-dialog-trigger>
+            <button class="btn-table">Edit</button>
+            </mp-overlay-dialog-trigger>
+            <mp-overlay-dialog-content>
+            {{#ifCond schemeType.value "===" "http://www.w3.org/2004/02/skos/core#ConceptScheme"}}
+                [[> rsp:ConceptSchemeForm]]
+            {{/ifCond}}
+            {{#ifCond schemeType.value "!==" "http://www.w3.org/2004/02/skos/core#ConceptScheme"}}
+                [[> rsp:AuthorityDocumentForm]]
+            {{/ifCond}}
+            </mp-overlay-dialog-content>
+        </mp-overlay-dialog>
+        <button class="btn-table">
+            <mp-graph-store-action title="Export" action="GET" graphuri="{{scheme.value}}" file-ending="trig">Export</mp-graph-store-action>
+        </button>
+        <button class="btn-table btn-table-delete">
+            <mp-graph-store-action title="Delete" action="DELETE" graphuri="{{scheme.value}}">Delete</mp-graph-store-action>
+        </button>
+        </div>
+    </div>
+    </template>
+
+</semantic-table>
+</semantic-search-result>
+</semantic-search-result-holder>
+</semantic-search>

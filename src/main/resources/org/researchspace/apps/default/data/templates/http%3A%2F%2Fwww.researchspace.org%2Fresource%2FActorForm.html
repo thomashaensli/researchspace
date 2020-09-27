@@ -1,0 +1,100 @@
+<semantic-form id='vocab-form' 
+               persistence='{"type": "sparql", "targetGraphIri": "{{scheme}}"}'
+               new-subject-template='{{#if new}}http://www.researchspace.org/entity/E21_Person/{{{{raw}}}}{{UUID}}{{{{/raw}}}}{{/if}}'
+               subject='{{#if edit}}{{node}}{{/if}}'
+               post-action="event"
+               fields='[[
+                fieldDefinitions
+                  inScheme="http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in"
+                  rdfsLabel="http://www.w3.org/2000/01/rdf-schema#label"
+                  appelationLabel="http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by"
+                  broader="http://www.cidoc-crm.org/cidoc-crm/P152_has_parent"
+                  narrower="http://www.cidoc-crm.org/cidoc-crm/P152i_is_parent_of"
+                  classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                  scopeNote="http://www.cidoc-crm.org/cidoc-crm/P3_has_note"
+                  bourne="http://www.cidoc-crm.org/cidoc-crm/P98i_was_born"
+                  P138i_has_representation="http://www.cidoc-crm.org/cidoc-crm/P138i_has_representation"
+               ]]'
+>
+
+  <div class="form-scroll-area">
+
+    <semantic-form-hidden-input for="inScheme" default-value="{{scheme}}"> </semantic-form-hidden-input>  
+    
+    <semantic-form-text-input for="rdfsLabel"> </semantic-form-text-input>
+    {{#if broader}}
+      <semantic-form-autocomplete-input for="broader" placeholder="drag from tree" default-values='["{{broader}}"]'></semantic-form-autocomplete-input>
+    {{else}}
+      <semantic-form-autocomplete-input for="broader" placeholder="drag from tree"></semantic-form-autocomplete-input>
+    {{/if}}
+    <semantic-form-autocomplete-input for="narrower" placeholder="drag from tree"></semantic-form-autocomplete-input>
+    <semantic-form-text-input for="scopeNote" multiline=true> </semantic-form-text-input>
+
+
+    <semantic-form-text-input for="appelationLabel"> </semantic-form-text-input>
+      
+    <semantic-form-composite-input for="bourne" 
+                                   label="Bourne"
+                                   new-subject-template="/E67_Birth"  
+                                   fields='[[
+                                    fieldDefinitions
+                                      classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                                      hasTimeSpan="http://www.cidoc-crm.org/cidoc-crm/P4_has_time-span"
+                                    ]]'>
+      <semantic-form-hidden-input for="classtype" default-value='http://www.cidoc-crm.org/cidoc-crm/E67_Birth'> </semantic-form-hidden-input>
+
+          <semantic-form-composite-input for="hasTimeSpan" 
+                                      label="Time Span"
+                                      new-subject-template="/E67_Birth"  
+                                      fields='[[
+                                        fieldDefinitions
+                                          classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                                          beginOfTimeSpan="http://www.cidoc-crm.org/cidoc-crm/P82a_begin_of_the_begin"
+                                          endOfTimeSpan="http://www.cidoc-crm.org/cidoc-crm/P82b_end_of_the_end"
+                                        ]]'>
+          <semantic-form-hidden-input for="classtype" default-value='http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span'> </semantic-form-hidden-input>
+          <semantic-form-text-input for="beginOfTimeSpan"> </semantic-form-text-input>
+          <semantic-form-text-input for="endOfTimeSpan"> </semantic-form-text-input>
+          </semantic-form-composite-input>
+    </semantic-form-composite-input>
+
+    <!--
+    [[!--   proffesion="http://www.researchspace.org/ontology/PX_proffesion"
+                  nationality="http://www.researchspace.org/ontology/PX_nationality"
+                  gender="http://www.researchspace.org/ontology/PX_gender" --]]
+           
+    <semantic-form-text-input for="gender"> </semantic-form-text-input>
+    <semantic-form-text-input for="proffesion"> </semantic-form-text-input>
+    <semantic-form-text-input for="nationality"> </semantic-form-text-input>
+    -->
+
+    <semantic-form-autocomplete-input for="P138i_has_representation"></semantic-form-autocomplete-input>
+    <semantic-form-hidden-input for="classtype" default-values='["http://www.cidoc-crm.org/cidoc-crm/E21_Person"]'></semantic-form-hidden-input>
+   
+    <semantic-form-errors></semantic-form-errors>
+    <!-- save and reset button for form -->
+
+  </div>
+
+  <div class="btn-group">
+    <div>
+    {{#if edit}}
+      <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{node}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E21_Person"}' targets='["term-forms"]'>
+        <button name="add" class="btn btn-grey">Add narrower term </button>
+      </mp-event-trigger>
+    {{/if}}
+    </div>
+    <div>  
+      <button name="reset" class="btn btn-default">Reset</button>
+      <mp-ldp-remove-from-container-action
+                                       iri='{{node}}/container'
+                                       container='http://www.researchspace.org/resource/system/formContainer'>
+        <button type="button" name='delete' class="btn btn-grey btn-danger" title="Delete">
+          Delete
+        </button>
+      </mp-ldp-remove-from-container-action>
+      <button name="submit" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+
+</semantic-form>

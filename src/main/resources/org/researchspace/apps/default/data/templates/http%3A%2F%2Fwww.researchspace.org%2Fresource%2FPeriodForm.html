@@ -1,30 +1,16 @@
-{{#if new}}
-  {{#if broader}}
-      <h1 style="margin-bottom: 1em;">Adding: <strong>new term narrower to <mp-label iri='{{broader}}'></mp-label></strong></h1>
-  {{else}}
-      <h1 style="margin-bottom: 1em;">Adding: <strong>new term</strong></h1>
-  {{/if}}
-{{/if}}
-
-{{#if edit}}<h1>Editing term: <strong><mp-label iri='{{node}}'></mp-label></strong></h1>
-  <div style="margin-bottom: 1.2em;">Term IRI: {{node}}</div>
-{{/if}}
-
 <semantic-form id='vocab-form' 
                persistence='{"type": "sparql", "targetGraphIri": "{{scheme}}"}'
-               new-subject-template='{{#if new}}http://www.researchspace.org/entity/E55_Type/{{{{raw}}}}{{UUID}}{{{{/raw}}}}{{/if}}'
+               new-subject-template='{{#if new}}http://www.researchspace.org/entity/E4_Period/{{{{raw}}}}{{UUID}}{{{{/raw}}}}{{/if}}'
                subject='{{#if edit}}{{node}}{{/if}}'
                post-action="event"
                fields='[[
                 fieldDefinitions
-                  inScheme="http://www.w3.org/2004/02/skos/core#inScheme"
-                  prefLabel="http://www.w3.org/2004/02/skos/core#prefLabel"
-                  broader="http://www.w3.org/2004/02/skos/core#broaderobjecttype"
-                  narrower="http://www.w3.org/2004/02/skos/core#narrower"
+                  inScheme="http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in"
+                  rdfsLabel="http://www.w3.org/2000/01/rdf-schema#label"
+                  broader="http://www.cidoc-crm.org/cidoc-crm/P10_falls_within"
+                  narrower="http://www.cidoc-crm.org/cidoc-crm/P10i_contains"
                   classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-                  scopeNote="http://www.w3.org/2004/02/skos/core#scopeNote"
-                  altLabel="http://www.w3.org/2004/02/skos/core#altLabel"
-                  related="http://www.w3.org/2004/02/skos/core#related"
+                  scopeNote="http://www.cidoc-crm.org/cidoc-crm/P3_has_note"
                   P138i_has_representation="http://www.cidoc-crm.org/cidoc-crm/P138i_has_representation"
                ]]'
 >
@@ -33,7 +19,7 @@
 
     <semantic-form-hidden-input for="inScheme" default-value="{{scheme}}"> </semantic-form-hidden-input>  
     
-    <semantic-form-text-input for="prefLabel"> </semantic-form-text-input>
+    <semantic-form-text-input for="rdfsLabel"> </semantic-form-text-input>
     {{#if broader}}
       <semantic-form-autocomplete-input for="broader" placeholder="drag from tree" default-values='["{{broader}}"]'></semantic-form-autocomplete-input>
     {{else}}
@@ -42,10 +28,8 @@
     <semantic-form-autocomplete-input for="narrower" placeholder="drag from tree"></semantic-form-autocomplete-input>
     <semantic-form-text-input for="scopeNote" multiline=true> </semantic-form-text-input>
     <semantic-form-autocomplete-input for="P138i_has_representation"></semantic-form-autocomplete-input>
-    <semantic-form-hidden-input for="classtype" default-values='["http://www.cidoc-crm.org/cidoc-crm/E55_Type","http://www.w3.org/2004/02/skos/core#Concept"]'></semantic-form-hidden-input>
-    <semantic-form-text-input for="altLabel"> </semantic-form-text-input>
-    <semantic-form-autocomplete-input for="related"> </semantic-form-autocomplete-input>
-
+    <semantic-form-hidden-input for="classtype" default-values='["http://www.cidoc-crm.org/cidoc-crm/E4_Period"]'></semantic-form-hidden-input>
+   
     <semantic-form-errors></semantic-form-errors>
     <!-- save and reset button for form -->
 
@@ -54,7 +38,7 @@
   <div class="btn-group">
     <div>
     {{#if edit}}
-      <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{node}}", "new": true, "entitytype":"http://www.w3.org/2004/02/skos/core#Concept" }' targets='["term-forms"]'>
+      <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{node}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E4_Period" }' targets='["term-forms"]'>
         <button name="add" class="btn btn-grey">Add narrower term</button>
       </mp-event-trigger>
     {{/if}}

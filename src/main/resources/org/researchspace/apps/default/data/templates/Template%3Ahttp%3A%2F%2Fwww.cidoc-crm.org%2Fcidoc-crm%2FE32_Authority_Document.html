@@ -1,0 +1,126 @@
+<mp-event-proxy id='tree-refresh' on-event-source='vocab-form' proxy-event-type='Component.Refresh' proxy-targets='["mytree"]'></mp-event-proxy>
+
+<ol class="page-breadcrumb">
+  <li>
+    <mp-link title="Home" url="/">Home</mp-link>
+  </li>
+  <li>
+    <semantic-link iri='[[resolvePrefix "rsp:VocabularyManager"]]'>Vocabulary Manager</semantic-link>
+    </li>
+  <li class="active">
+    Scheme: <mp-label iri='[[this]]'></mp-label> 
+  </li>
+</ol>
+
+<div class="page">
+[[#>rsp:ClipboardSidebar]]
+[[#>rsp:DetailsSidebar]]
+<semantic-switch query='SELECT ?case
+                        WHERE {
+                            graph <[[this]]> {
+                                OPTIONAL {?entity crm:P71i_is_listed_in <[[this]]> .
+                                          ?entity a ?entityType . }
+                                OPTIONAL {<[[this]]> crm:P67_refers_to ?entityType }
+                            }
+                            BIND(IF (CONTAINS(STR(?entityType),"Place"),"Place",IF(CONTAINS(STR(?entityType),"Period"),"Period",
+                                    IF(CONTAINS(STR(?entityType),"Actor"),"Actor",IF(CONTAINS(STR(?entityType),"Person"),"Actor","Default")))) as ?case)
+                        } limit 1' 
+                 cases='{"Actor":"{{> actor}}", "Place": "{{> place}}", "Event":"{{> event}}",
+                         "Period":"{{> period}}", "Material":"{{> material}}","Default":"{{> default}}"}'>
+    <template id="default">
+    </template>
+    <template id="actor">
+        [[#> rsp:VocabularyContentTemplate title="Vocabulary" entitytype="http://www.cidoc-crm.org/cidoc-crm/E21_Person"]]
+            [[#partial "lazyTreeConfig"]]
+                <semantic-lazy-tree id='scheme-tree' info-template='{{> template}}' type='simple' 
+                        config='{"scheme": "[[this]]", 
+                                "schemePattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in> ?__scheme__",
+                                "relationPattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P152_has_parent> ?parent"}'>
+                    <template id='template'>
+                        <span class="tree-item-actions-container">
+                        <mp-event-trigger id='form-edit-trigger' type='Component.TemplateUpdate'
+                                            data='{"scheme": "[[this]]", "node":"{{iri}}",  "edit": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E21_Person" }' targets='["term-forms"]'>
+                            <span class='tree-item-action' style="margin-right: 7px;"><i class='fa fa-pencil' title="Edit term"></i></span>
+                        </mp-event-trigger>
+                        <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{iri}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E21_Person" }' targets='["term-forms"]'>
+                            <span class='tree-item-action'><i class='fa fa-plus' title="Add narrower term"></i></span>
+                        </mp-event-trigger>
+                        </span>
+                    </template>
+                </semantic-lazy-tree>    
+                [[/partial]]
+            [[/rsp:VocabularyContentTemplate]]
+    </template>
+    <template id="event">
+        [[#> rsp:VocabularyContentTemplate title="Vocabulary" entitytype="http://www.cidoc-crm.org/cidoc-crm/E5_Event"]]
+            [[#partial "lazyTreeConfig"]]
+                <semantic-lazy-tree id='scheme-tree' info-template='{{> template}}' type='simple' 
+                        config='{"scheme": "[[this]]", 
+                                "schemePattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in> ?__scheme__",
+                                "relationPattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P9_consists_of> ?parent"}'>
+                    <template id='template'>
+                        <span class="tree-item-actions-container">
+                        <mp-event-trigger id='form-edit-trigger' type='Component.TemplateUpdate'
+                                            data='{"scheme": "[[this]]", "node":"{{iri}}",  "edit": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E5_Event" }' targets='["term-forms"]'>
+                            <span class='tree-item-action' style="margin-right: 7px;"><i class='fa fa-pencil' title="Edit term"></i></span>
+                        </mp-event-trigger>
+                        <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{iri}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E5_Event" }' targets='["term-forms"]'>
+                            <span class='tree-item-action'><i class='fa fa-plus' title="Add narrower term"></i></span>
+                        </mp-event-trigger>
+                        </span>
+                    </template>
+                </semantic-lazy-tree>    
+                [[/partial]]
+            [[/rsp:VocabularyContentTemplate]]
+    </template>
+    <template id="material">
+    </template>
+    <template id="period">
+    [[#> rsp:VocabularyContentTemplate title="Vocabulary" entitytype="http://www.cidoc-crm.org/cidoc-crm/E4_Period"]]
+       [[#partial "lazyTreeConfig"]]
+        <semantic-lazy-tree id='scheme-tree' info-template='{{> template}}' type='simple' 
+                config='{"scheme": "[[this]]", 
+                        "schemePattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in> ?__scheme__",
+                        "relationPattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P10_falls_within> ?parent"}'>
+            <template id='template'>
+                <span class="tree-item-actions-container">
+                <mp-event-trigger id='form-edit-trigger' type='Component.TemplateUpdate'
+                                    data='{"scheme": "[[this]]", "node":"{{iri}}",  "edit": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E4_Period" }' targets='["term-forms"]'>
+                    <span class='tree-item-action' style="margin-right: 7px;"><i class='fa fa-pencil' title="Edit term"></i></span>
+                </mp-event-trigger>
+                <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{iri}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E4_Period" }' targets='["term-forms"]'>
+                    <span class='tree-item-action'><i class='fa fa-plus' title="Add narrower term"></i></span>
+                </mp-event-trigger>
+                </span>
+            </template>
+        </semantic-lazy-tree>    
+        [[/partial]]
+    [[/rsp:VocabularyContentTemplate]]
+    </template>
+    <template id="place">
+    [[#> rsp:VocabularyContentTemplate title="Vocabulary" entitytype="http://www.cidoc-crm.org/cidoc-crm/E53_Place"]]
+       [[#partial "lazyTreeConfig"]]
+        <semantic-lazy-tree id='scheme-tree' info-template='{{> template}}' type='simple' 
+                config='{"scheme": "[[this]]", 
+                        "schemePattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in> ?__scheme__",
+                        "relationPattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P89_falls_within> ?parent"}'>
+            <template id='template'>
+                <span class="tree-item-actions-container">
+                <mp-event-trigger id='form-edit-trigger' type='Component.TemplateUpdate'
+                                    data='{"scheme": "[[this]]", "node":"{{iri}}",  "edit": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E53_Place" }' targets='["term-forms"]'>
+                    <span class='tree-item-action' style="margin-right: 7px;"><i class='fa fa-pencil' title="Edit term"></i></span>
+                </mp-event-trigger>
+                <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{iri}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E53_Place" }' targets='["term-forms"]'>
+                    <span class='tree-item-action'><i class='fa fa-plus' title="Add narrower term"></i></span>
+                </mp-event-trigger>
+                </span>
+            </template>
+        </semantic-lazy-tree>    
+        [[/partial]]
+    [[/rsp:VocabularyContentTemplate]]
+    </template>
+</semantic-switch>
+[[/rsp:DetailsSidebar]]
+[[/rsp:ClipboardSidebar]]
+
+</div>

@@ -1,0 +1,43 @@
+<div class="rs-vocabulary-terms-container">
+
+      <div class="schema-area-bg"></div>
+
+      <div class="rs-vocabulary-terms">
+        <h1 class="rs-vocabulary-terms-title"><strong><mp-label iri='[[this]]'></mp-label></strong> </h1>
+        <div class="rs-vocabulary-terms-area">
+          <h1>Terms</h1>
+          <mp-event-target-refresh id='mytree'>
+           [[#block "lazyTreeConfig"]][[/block]]
+
+          </mp-event-target-refresh>
+        </div>
+      </div>
+
+      <div class="rs-vocabulary-terms-edit-area">
+        
+        <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "new": true, "entitytype":"[[entitytype]]" }' targets='["term-forms"]'>
+          <button class="btn btn-primary btn-newTerm">
+            <i class='fa fa-plus'></i>
+            <span>new Term</span>
+          </button>
+        </mp-event-trigger>
+      
+        <div class="rs-vocabulary-terms-form-area">
+          <mp-event-target-template-render id='term-forms' template='{{> template}}'>
+            <template id='template'>
+               {{#if edit}}
+                    {{> rsp:VocabularyEntityForm  edit=true entitytype=entitytype}} 
+              {{else if new}}
+                    {{> rsp:VocabularyEntityForm  new=true entitytype=entitytype}}
+              {{else}}
+                <div></div>
+              {{/if}}
+            </template>
+          </mp-event-target-template-render>
+        </div>
+
+      </div>
+      
+  </div>
+
+
