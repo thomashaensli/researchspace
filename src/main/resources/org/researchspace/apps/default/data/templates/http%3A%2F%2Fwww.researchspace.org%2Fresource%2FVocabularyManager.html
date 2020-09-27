@@ -92,7 +92,7 @@ uses client-side templates:
                               
                               {{#ifCond bindings.0.entityType.value "!==" "http://www.w3.org/2004/02/skos/core#Concept"}}
                                 <semantic-form-hidden-input for="classtype" default-values='["http://www.cidoc-crm.org/cidoc-crm/E32_Authority_Document","http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object"]'></semantic-form-hidden-input>
-                                <semantic-form-hidden-input for="prefLabel" default-value='{{bindings.0.schemeLabel.value}}'></semantic-form-hidden-input>                       
+                                <semantic-form-hidden-input for="rdfsLabel" default-value='{{bindings.0.schemeLabel.value}}'></semantic-form-hidden-input>                       
                               {{/ifCond}}
                               <semantic-form-errors></semantic-form-errors>
                               <!-- save and reset button for form -->

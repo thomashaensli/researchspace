@@ -39,25 +39,4 @@
 
   </div>
 
-  <div class="btn-group">
-    <div>
-    {{#if edit}}
-      <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{node}}", "new": true, "entitytype":"http://www.w3.org/2004/02/skos/core#Concept" }' targets='["term-forms"]'>
-        <button name="add" class="btn btn-grey">Add narrower term</button>
-      </mp-event-trigger>
-    {{/if}}
-    </div>
-    <div>  
-      <button name="reset" class="btn btn-default">Reset</button>
-      <mp-ldp-remove-from-container-action
-                                       iri='{{node}}/container'
-                                       container='http://www.researchspace.org/resource/system/formContainer'>
-        <button type="button" name='delete' class="btn btn-grey btn-danger" title="Delete">
-          Delete
-        </button>
-      </mp-ldp-remove-from-container-action>
-      <button name="submit" class="btn btn-primary">Save</button>
-    </div>
-  </div>
-
-</semantic-form>
+  
