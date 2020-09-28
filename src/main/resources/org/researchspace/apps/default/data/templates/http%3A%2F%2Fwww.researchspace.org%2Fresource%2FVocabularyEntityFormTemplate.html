@@ -1,0 +1,83 @@
+{{#if new}}
+  {{#if broader}}
+      <h1 style="margin-bottom: 1em;">Adding: <strong>new term narrower to <mp-label iri='{{broader}}'></mp-label></strong></h1>
+  {{else}}
+      <h1 style="margin-bottom: 1em;">Adding: <strong>new term</strong></h1>
+  {{/if}}
+{{/if}}
+
+{{#if edit}}<h1>Editing term: <strong><mp-label iri='{{node}}'></mp-label></strong></h1>
+  <div style="margin-bottom: 1.2em;">Term IRI: {{node}}
+  </div>
+{{/if}}
+
+<mp-event-target-template-render id="vocab-form-refresh" template="{{>vocab-form-panel}}">
+<template id="vocab-form-panel">
+  [[#> entityForm]] [[/entityForm]]
+  <div class="btn-group">
+    <div>
+      {{#if edit}}
+        <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{node}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E21_Person"}' targets='["term-forms"]'>
+          <button name="add" class="btn btn-grey">Add narrower term </button>
+        </mp-event-trigger>
+      {{/if}}
+    </div>
+    <div> 
+      {{#if edit}}
+        <button name="reset" class="btn btn-default">Reset</button>
+        <mp-overlay-dialog show='{{#if delete}}true{{else}}false{{/if}}' id='item-remove-confirmation-dialog' title="Remove Entity" type="modal" bs-size="large">
+          <mp-overlay-dialog-trigger>
+            <button name="delete" class="btn btn-danger">Delete</button>
+          </mp-overlay-dialog-trigger>
+          <mp-overlay-dialog-content>
+            <div>
+              <div>
+                <p>Are you sure you want to remove the entity '<strong><mp-label iri='{{node}}'></mp-label></strong>' ?</p>
+                <semantic-query 
+                                query='
+                                  SELECT ?resource WHERE {
+                                    ?resource ?p <{{node}}> .
+                                  }
+                                '
+                                template='{{> referredByTemplate}}'
+                >
+                  <template id='referredByTemplate'>
+                    Some entities in the system link to <strong><mp-label iri='{{node}}'></mp-label></strong>:
+                    <ul>
+                      {{#each bindings}}
+                        <li>
+                          <semantic-link iri='{{resource.value}}'></semantic-link>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </template>
+                </semantic-query>
+              </div>
+              <div class="form-btn-group">
+                <div style="display: flex; justify-content: flex-end; width: 100%;">
+                  <mp-event-trigger id='cancel-feature-removal' type='OverlayDialog.Close' targets='["item-remove-confirmation-dialog"]'>
+                    <button class="btn btn-default">Cancel</button>
+                  </mp-event-trigger>
+                  <mp-event-trigger id='confirm-entity-removal' type='Form.RemoveResource' data='{"iri": "{{node}}"}' targets='["vocab-form"]'>
+                    <button class="btn btn-danger">Delete Entity</button>
+                  </mp-event-trigger>  
+                  <mp-event-proxy id='update-form' on-event-source='vocab-form' on-event-type='Form.ResourceRemoved'
+                                  proxy-event-type='Component.TemplateUpdate' data='{}' proxy-targets='["term-forms"]'
+                  ></mp-event-proxy>
+                  <mp-event-proxy id='close-form-removal-dialog' on-event-source='vocab-form' on-event-type='Form.ResourceRemoved'
+                                  proxy-event-type='OverlayDialog.Close' data='{}' proxy-targets='["item-remove-confirmation-dialog"]'
+                  ></mp-event-proxy>
+                </div>
+              </div>
+            </div>
+          </mp-overlay-dialog-content>
+        </mp-overlay-dialog>
+      {{/if}}
+      <button name="submit" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+  <!-- DO NOT DELETE THE semantic-form tag below as it is assumes that the opening semantic-form tag is passed on from the inline entityForm above -->
+  </semantic-form>
+  <!-- DO NOT DELETE THE semantic-form tag above -->
+</template>
+</mp-event-target-template-render>

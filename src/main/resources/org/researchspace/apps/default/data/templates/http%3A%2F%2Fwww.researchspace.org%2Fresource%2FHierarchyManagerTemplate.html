@@ -8,10 +8,10 @@ Current Template
 Dependency (works together with)
 [[> rsp:HierarchyManagerSearchResults]]
 
-Incoming Parameters
-title -- can be set to "Vocabulary/Project/Bibliography/etc."
-type -- can be set to "Scheme/Project/etc."
-scheme -- is a flag set to true or false 
+Incoming Parameters:
+  title -- can be set to "Vocabulary/Project/Bibliography/etc."
+  type -- can be set to "Scheme/Project/etc."
+  scheme -- is a flag set to true or false 
 --]]
 
   <div class="page-grid-container">
@@ -26,6 +26,7 @@ scheme -- is a flag set to true or false
               <span class="fa fa-plus-circle" title="Add [[title]]"></span>
             </mp-overlay-dialog-trigger>
             <mp-overlay-dialog-content style="padding: 20px 40px 40px;">
+              [[!-- The code for this inline template is defined in the application page using the rsp:HierarchyManagerTemplate --]]
               [[#> addNewStructureForm]] [[/addNewStructureForm]]
             </mp-overlay-dialog-content>
           </mp-overlay-dialog>
@@ -63,9 +64,6 @@ scheme -- is a flag set to true or false
       </div>
       
       [[#> exceptionsStructureList]] [[/exceptionsStructureList]]
-      
       [[> rsp:HierarchyManagerSearchResults]]
-       
-
     </div>  
   </div>
