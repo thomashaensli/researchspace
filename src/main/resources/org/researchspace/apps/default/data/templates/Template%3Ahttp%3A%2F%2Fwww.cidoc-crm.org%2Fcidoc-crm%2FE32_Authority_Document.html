@@ -23,11 +23,34 @@
                                 OPTIONAL {<[[this]]> crm:P67_refers_to ?entityType }
                             }
                             BIND(IF (CONTAINS(STR(?entityType),"Place"),"Place",IF(CONTAINS(STR(?entityType),"Period"),"Period",
-                                    IF(CONTAINS(STR(?entityType),"Actor"),"Actor",IF(CONTAINS(STR(?entityType),"Person"),"Actor","Default")))) as ?case)
+                                    IF(CONTAINS(STR(?entityType),"Actor"),"Actor",IF(CONTAINS(STR(?entityType),"Person"),"Actor",
+                                    IF(CONTAINS(STR(?entityType),"ancient_period"),"Ancient Period","Default"))))) as ?case)
                         } limit 1' 
                  cases='{"Actor":"{{> actor}}", "Place": "{{> place}}", "Event":"{{> event}}",
-                         "Period":"{{> period}}", "Material":"{{> material}}","Default":"{{> default}}"}'>
+                         "Period":"{{> period}}", "Material":"{{> material}}","Ancient Period":"{{> ancient_period}}","Default":"{{> default}}"}'>
     <template id="default">
+    </template>
+    <template id="ancient_period">
+       [[#> rsp:VocabularyContentTemplate title="Vocabulary" entitytype="http://www.researchspace.org/vocab/category/ancient_period"]]
+       [[#partial "lazyTreeConfig"]]
+        <semantic-lazy-tree id='scheme-tree' info-template='{{> template}}' type='simple' 
+                config='{"scheme": "[[this]]", 
+                        "schemePattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in> ?__scheme__",
+                        "relationPattern": "?item <http://www.cidoc-crm.org/cidoc-crm/P10_falls_within> ?parent"}'>
+            <template id='template'>
+                <span class="tree-item-actions-container">
+                <mp-event-trigger id='form-edit-trigger' type='Component.TemplateUpdate'
+                                    data='{"scheme": "[[this]]", "node":"{{iri}}",  "edit": true, "entitytype":"http://www.researchspace.org/vocab/category/ancient_period" }' targets='["term-forms"]'>
+                    <span class='tree-item-action' style="margin-right: 7px;"><i class='fa fa-pencil' title="Edit term"></i></span>
+                </mp-event-trigger>
+                <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{iri}}", "new": true, "entitytype":"http://www.researchspace.org/vocab/category/ancient_period" }' targets='["term-forms"]'>
+                    <span class='tree-item-action'><i class='fa fa-plus' title="Add narrower term"></i></span>
+                </mp-event-trigger>
+                </span>
+            </template>
+        </semantic-lazy-tree>    
+        [[/partial]]
+    [[/rsp:VocabularyContentTemplate]]
     </template>
     <template id="actor">
         [[#> rsp:VocabularyContentTemplate title="Vocabulary" entitytype="http://www.cidoc-crm.org/cidoc-crm/E21_Person"]]

@@ -10,12 +10,15 @@
                 fieldDefinitions
                   inScheme="http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in"
                   rdfsLabel="http://www.w3.org/2000/01/rdf-schema#label"
-                  appelationLabel="http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by"
+                  appelation="http://www.cidoc-crm.org/cidoc-crm/P1_is_identified_by"
                   broader="http://www.cidoc-crm.org/cidoc-crm/P152_has_parent"
                   narrower="http://www.cidoc-crm.org/cidoc-crm/P152i_is_parent_of"
+                  gender="http://www.researchspace.org/ontology/PX_gender"
+                  profession="http://www.researchspace.org/ontology/PX_profession"
+                  nationality="http://www.researchspace.org/ontology/PX_nationality"
                   classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
                   scopeNote="http://www.cidoc-crm.org/cidoc-crm/P3_has_note"
-                  bourne="http://www.cidoc-crm.org/cidoc-crm/P98i_was_born"
+                  borne="http://www.cidoc-crm.org/cidoc-crm/P98i_was_born"
                   P138i_has_representation="http://www.cidoc-crm.org/cidoc-crm/P138i_has_representation"
                ]]'
 >
@@ -24,20 +27,29 @@
 
     <semantic-form-hidden-input for="inScheme" default-value="{{scheme}}"> </semantic-form-hidden-input>  
     
-    <semantic-form-text-input for="rdfsLabel"> </semantic-form-text-input>
-    {{#if broader}}
-      <semantic-form-autocomplete-input for="broader" placeholder="drag from tree" default-values='["{{broader}}"]'></semantic-form-autocomplete-input>
-    {{else}}
-      <semantic-form-autocomplete-input for="broader" placeholder="drag from tree"></semantic-form-autocomplete-input>
-    {{/if}}
-    <semantic-form-autocomplete-input for="narrower" placeholder="drag from tree"></semantic-form-autocomplete-input>
+    <!-- <semantic-form-text-input for="rdfsLabel"> </semantic-form-text-input> -->
+    
+    <semantic-form-composite-input for="appelation" 
+                                   label="Known As"
+                                   new-subject-template="/E41_Appelation/{{{{raw}}}}{{UUID}}{{{{/raw}}}}"  
+                                   fields='[[
+                                    fieldDefinitions
+                                      classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                                      rdfsLabel="http://www.w3.org/2000/01/rdf-schema#label"
+                                    ]]'>
+      <semantic-form-hidden-input for="classtype" default-value='http://www.cidoc-crm.org/cidoc-crm/E41_Appelation'> </semantic-form-hidden-input>
+      <semantic-form-text-input render-header=false for="rdfsLabel"> </semantic-form-text-input>
+    </semantic-form-composite-input>
+
     <semantic-form-text-input for="scopeNote" multiline=true> </semantic-form-text-input>
 
 
-    <semantic-form-text-input for="appelationLabel"> </semantic-form-text-input>
-      
-    <semantic-form-composite-input for="bourne" 
-                                   label="Born"
+    <semantic-form-autocomplete-input for="profession" label="Occupation"> </semantic-form-autocomplete-input>
+    <semantic-form-autocomplete-input for="nationality" label="Nationality"> </semantic-form-autocomplete-input>
+    <semantic-form-select-input for="gender" label="Gender"> </semantic-form-select-input>
+   
+    <semantic-form-composite-input for="borne" 
+                                   label="Birth Date"
                                    new-subject-template="/E67_Birth"  
                                    fields='[[
                                     fieldDefinitions
@@ -61,16 +73,14 @@
           </semantic-form-composite-input>
     </semantic-form-composite-input>
 
-    <!--
-    [[!--   proffesion="http://www.researchspace.org/ontology/PX_proffesion"
-                  nationality="http://www.researchspace.org/ontology/PX_nationality"
-                  gender="http://www.researchspace.org/ontology/PX_gender" --]]
-           
-    <semantic-form-text-input for="gender"> </semantic-form-text-input>
-    <semantic-form-text-input for="proffesion"> </semantic-form-text-input>
-    <semantic-form-text-input for="nationality"> </semantic-form-text-input>
-    -->
 
+    {{#if broader}}
+      <semantic-form-autocomplete-input for="broader" placeholder="drag from tree" default-values='["{{broader}}"]'></semantic-form-autocomplete-input>
+    {{else}}
+      <semantic-form-autocomplete-input for="broader" placeholder="drag from tree"></semantic-form-autocomplete-input>
+    {{/if}}
+    <semantic-form-autocomplete-input for="narrower" placeholder="drag from tree"></semantic-form-autocomplete-input>
+   
     <semantic-form-autocomplete-input for="P138i_has_representation"></semantic-form-autocomplete-input>
     <semantic-form-hidden-input for="classtype" default-values='["http://www.cidoc-crm.org/cidoc-crm/E21_Person"]'></semantic-form-hidden-input>
    

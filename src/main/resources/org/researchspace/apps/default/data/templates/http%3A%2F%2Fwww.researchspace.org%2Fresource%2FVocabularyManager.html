@@ -46,6 +46,7 @@ uses client-side template:
                                                 { (<http://www.w3.org/2004/02/skos/core#Concept> \"Concepts Vocabulary\")
                                                   (<http://www.cidoc-crm.org/cidoc-crm/E21_Person> \"Persons Authority\")
                                                   (<http://www.cidoc-crm.org/cidoc-crm/E4_Period> \"Periods Authority\")
+                                                  (<http://www.researchspace.org/vocab/category/ancient_period> \"Ancient Periods Authority\")
                                                   (<http://www.cidoc-crm.org/cidoc-crm/E53_Place> \"Places Authority\") 
                                                   }}"
                                                 }
@@ -77,7 +78,7 @@ uses client-side template:
                     {{#if bindings.0.exists}}
                       <div>Scheme with label &nbsp;<b>{{bindings.0.schemeLabel.value}}{{bindings.0.entityType.value}} </b>&nbsp; and IRI &nbsp;<b>{{bindings.0.scheme.value}}</b> <br> already exists!</div> 
                     {{else}}
-                      <div>Are you sure you want to create new scheme with IRI: <b>{{bindings.0.scheme.value}} {{bindings.0.entityType.value}}</b> ?</div>                       
+                      <div>Are you sure you want to create new scheme with IRI: <b>{{bindings.0.scheme.value}}</b> ?</div>                       
                       <semantic-form id='new-scheme-form' 
                                     persistence='{"type": "sparql", "targetGraphIri": "{{bindings.0.scheme.value}}"}'
                                     new-subject-template='{{bindings.0.scheme.value}}'

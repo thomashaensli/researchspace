@@ -9,7 +9,7 @@
                 fieldDefinitions
                   inScheme="http://www.w3.org/2004/02/skos/core#inScheme"
                   prefLabel="http://www.w3.org/2004/02/skos/core#prefLabel"
-                  broader="http://www.w3.org/2004/02/skos/core#broaderobjecttype"
+                  broader="http://www.w3.org/2004/02/skos/core#broader"
                   narrower="http://www.w3.org/2004/02/skos/core#narrower"
                   classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
                   scopeNote="http://www.w3.org/2004/02/skos/core#scopeNote"
@@ -24,6 +24,8 @@
     <semantic-form-hidden-input for="inScheme" default-value="{{scheme}}"> </semantic-form-hidden-input>  
     
     <semantic-form-text-input for="prefLabel"> </semantic-form-text-input>
+    <semantic-form-text-input for="altLabel"> </semantic-form-text-input>
+   
     {{#if broader}}
       <semantic-form-autocomplete-input for="broader" placeholder="drag from tree" default-values='["{{broader}}"]'></semantic-form-autocomplete-input>
     {{else}}
@@ -33,7 +35,6 @@
     <semantic-form-text-input for="scopeNote" multiline=true> </semantic-form-text-input>
     <semantic-form-autocomplete-input for="P138i_has_representation"></semantic-form-autocomplete-input>
     <semantic-form-hidden-input for="classtype" default-values='["http://www.cidoc-crm.org/cidoc-crm/E55_Type","http://www.w3.org/2004/02/skos/core#Concept"]'></semantic-form-hidden-input>
-    <semantic-form-text-input for="altLabel"> </semantic-form-text-input>
     <semantic-form-autocomplete-input for="related"> </semantic-form-autocomplete-input>
 
     <semantic-form-errors></semantic-form-errors>

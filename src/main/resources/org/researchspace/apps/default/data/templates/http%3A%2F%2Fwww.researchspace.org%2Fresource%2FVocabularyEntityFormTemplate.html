@@ -17,8 +17,8 @@
   <div class="btn-group">
     <div>
       {{#if edit}}
-        <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{node}}", "new": true, "entitytype":"http://www.cidoc-crm.org/cidoc-crm/E21_Person"}' targets='["term-forms"]'>
-          <button name="add" class="btn btn-grey">Add narrower term </button>
+        <mp-event-trigger id='form-new-trigger' type='Component.TemplateUpdate' data='{"scheme": "[[this]]", "broader": "{{node}}", "new": true, "entitytype":"{{entitytype}}"}' targets='["term-forms"]'>
+          <button name="add" class="btn btn-grey">Add narrower term</button>
         </mp-event-trigger>
       {{/if}}
     </div>
@@ -35,18 +35,28 @@
                 <p>Are you sure you want to remove the entity '<strong><mp-label iri='{{node}}'></mp-label></strong>' ?</p>
                 <semantic-query 
                                 query='
-                                  SELECT ?resource WHERE {
+                                  SELECT DISTINCT ?resource ?label  
+                                  WHERE {
                                     ?resource ?p <{{node}}> .
+                                    OPTIONAL {<{{node}}> skos:prefLabel ?nodeLabel .}
+                                    OPTIONAL {<{{node}}> rdfs:label ?nodeLabel .}
+                    
+                                    OPTIONAL {
+                                      ?resource rdfs:label ?label .
+                                    }
+                                    OPTIONAL {
+                                      ?resource skos:prefLabel ?label .
+                                    }
                                   }
                                 '
-                                template='{{> referredByTemplate}}'
+                                template='{{> referredByTemplate node=node}}'
                 >
                   <template id='referredByTemplate'>
-                    Some entities in the system link to <strong><mp-label iri='{{node}}'></mp-label></strong>:
+                    Some entities in the system link to entity above {{node}}:
                     <ul>
                       {{#each bindings}}
                         <li>
-                          <semantic-link iri='{{resource.value}}'></semantic-link>
+                          <semantic-link iri='{{resource.value}}'>{{label.value}}</semantic-link>
                         </li>
                       {{/each}}
                     </ul>
@@ -72,8 +82,11 @@
             </div>
           </mp-overlay-dialog-content>
         </mp-overlay-dialog>
+        <button name="submit" class="btn btn-primary">Save</button>
       {{/if}}
-      <button name="submit" class="btn btn-primary">Save</button>
+      {{#if new}}
+          <button name="submit" class="btn btn-primary">Save</button>
+      {{/if}}
     </div>
   </div>
   <!-- DO NOT DELETE THE semantic-form tag below as it is assumes that the opening semantic-form tag is passed on from the inline entityForm above -->
