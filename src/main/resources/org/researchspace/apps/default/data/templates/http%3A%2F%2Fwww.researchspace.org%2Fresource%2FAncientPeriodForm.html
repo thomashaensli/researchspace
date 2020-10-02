@@ -7,15 +7,15 @@
                  post-action="event"
                  fields='[[
                         fieldDefinitions
-                        rdfsLabel="http://www.w3.org/2000/01/rdf-schema#label"
+                        rdfsLabel="http://www.researchspace.org/pattern/general/rdfs:label"
                         P3_has_note="http://www.cidoc-crm.org/cidoc-crm/P3_has_note"
                         periodtimespan="http://www.researchspace.org/pattern/ancientperiods/P4_has_time-span"
                         classtype="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
                         P2_has_type="http://www.cidoc-crm.org/cidoc-crm/P2_has_type"
                         inScheme="http://www.cidoc-crm.org/cidoc-crm/P71i_is_listed_in"
                         broaderperiod="http://www.researchspace.org/pattern/crmbroaderterm"
-                        broader="http://www.cidoc-crm.org/cidoc-crm/P10_falls_within"
-                        narrower="http://www.cidoc-crm.org/cidoc-crm/P10i_contains"
+                        broader="http://www.researchspace.org/pattern/vocabulary_manager/crm:P10_falls_within"
+                        narrower="http://www.researchspace.org/pattern/vocabulary_manager/crm:P10i_contains"
                         P119_meets_in_time_with="http://www.researchspace.org/pattern/ancientperiods/P119_meets_in_time_with"                    
                         ]]'>
     <semantic-form-hidden-input for="inScheme" default-value="{{scheme}}"> </semantic-form-hidden-input>  
@@ -60,7 +60,7 @@
                                             ]]'>
 
                 <semantic-form-autocomplete-input for="P14_carried_out_by">
-                <semantic-form new-subject-template='http://www.researchspace.org//Basic/E21_Person/{{{{raw}}}}{{UUID}}{{{{/raw}}}}' 
+                <semantic-form new-subject-template='http://www.researchspace.org/E21_Person/{{{{raw}}}}{{UUID}}{{{{/raw}}}}' 
                                 fields='[[
                                     fieldDefinitions
                                     ancientpersonlabel="http://www.researchspace.org/pattern/rdf-schema#ancientpersonlabel"
